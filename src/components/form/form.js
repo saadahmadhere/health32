@@ -1,81 +1,116 @@
-import { Form, Input } from 'antd';
-const onFinish = (values) => {
-	console.log('Success:', values);
-};
-const onFinishFailed = (errorInfo) => {
-	console.log('Failed:', errorInfo);
-};
+import { Modal, Form, Input, Button } from 'antd';
+import { useEffect } from 'react';
 
-const UserForm = ({ formInitialValues }) => (
-	<Form
-		name='basic'
-		labelCol={{
-			span: 8,
-		}}
-		wrapperCol={{
-			span: 16,
-		}}
-		style={{
-			maxWidth: 600,
-		}}
-		// initialValues={{
-		// 	remember: true,
-		// }}
-		onFinish={onFinish}
-		onFinishFailed={onFinishFailed}
-		autoComplete='off'
-		onValuesChange={(e) => console.log(e)}
-		initialValues={formInitialValues}
-	>
-		<Form.Item
-			label='Name'
-			name='name'
-			rules={[
-				{
-					required: true,
-					message: 'Please input your name!',
-				},
-			]}
-		>
-			<Input value={'test'} />
-		</Form.Item>
+const UserForm = ({
+	formData,
+	onCancelCb,
+	onOkCb,
+	isModalOpen,
+	initialFormData,
+}) => {
+	const [form] = Form.useForm();
 
-		<Form.Item
-			label='Email'
-			name='email'
-			rules={[
-				{
-					required: true,
-					message: 'Please input your password!',
-				},
+	useEffect(() => {
+		form.setFieldsValue(formData);
+	}, [formData, form, isModalOpen]);
+
+	const handleOk = () => {
+		form
+			.validateFields()
+			.then((values) => {
+				onOkCb({ values, id: formData.id });
+			})
+			.catch((info) => {
+				console.log('Validate Failed:', info);
+			});
+	};
+
+	const handleCancel = () => {
+		onCancelCb();
+		form.resetFields();
+	};
+
+	return (
+		<Modal
+			title='Edit Form'
+			open={isModalOpen}
+			onOk={handleOk}
+			onCancel={handleCancel}
+			footer={[
+				<Button key='cancel' onClick={handleCancel}>
+					Cancel
+				</Button>,
+				<Button key='submit' type='primary' onClick={handleOk}>
+					OK
+				</Button>,
 			]}
 		>
-			<Input />
-		</Form.Item>
-		<Form.Item
-			label='Phone'
-			name='phone'
-			rules={[
-				{
-					required: true,
-					message: 'Please input your phone number!',
-				},
-			]}
-		>
-			<Input />
-		</Form.Item>
-		<Form.Item
-			label='Website'
-			name='website'
-			rules={[
-				{
-					required: true,
-					message: 'Please input your website!',
-				},
-			]}
-		>
-			<Input />
-		</Form.Item>
-	</Form>
-);
+			<Form
+				name='basic'
+				labelCol={{
+					span: 8,
+				}}
+				wrapperCol={{
+					span: 16,
+				}}
+				style={{
+					maxWidth: 600,
+				}}
+				form={form}
+				initialValues={initialFormData}
+			>
+				<Form.Item
+					label='Name'
+					name='name'
+					rules={[
+						{
+							required: true,
+							message: 'Please input your name!',
+						},
+					]}
+				>
+					<Input />
+				</Form.Item>
+
+				<Form.Item
+					label='Email'
+					name='email'
+					rules={[
+						{
+							required: true,
+							message: 'Please input your password!',
+						},
+						{ type: 'email', message: 'Please enter a valid email address' },
+					]}
+				>
+					<Input />
+				</Form.Item>
+				<Form.Item
+					label='Phone'
+					name='phone'
+					rules={[
+						{
+							required: true,
+							message: 'Please input your phone number!',
+						},
+					]}
+				>
+					<Input />
+				</Form.Item>
+				<Form.Item
+					label='Website'
+					name='website'
+					rules={[
+						{
+							required: true,
+							message: 'Please input your website!',
+						},
+					]}
+				>
+					<Input />
+				</Form.Item>
+			</Form>
+		</Modal>
+	);
+};
 export default UserForm;
