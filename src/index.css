@@ -12,7 +12,19 @@ code {
 		monospace;
 }
 
+.ant-card-body {
+	padding: 24px;
+}
 .cardHeaderImage {
 	display: flex;
 	justify-content: center;
+}
+
+.cardContent {
+	display: flex;
+	align-items: center;
+}
+
+.cardContent p {
+	margin: 0 5px 0 10px;
 }

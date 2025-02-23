@@ -119,17 +119,16 @@ const UserCard = ({ user, setUsers }) => {
 				size='small'
 			>
 				<h3>{user.name}</h3>
-				<p>
-					<MailOutlined /> {user.email}
-				</p>
-				<p>
-					<PhoneOutlined /> {user.phone}
-				</p>
-				<p>
+				<div className='cardContent'>
+					<MailOutlined /> <p>{user.email}</p>
+				</div>
+				<div className='cardContent'>
+					<PhoneOutlined /> <p>{user.phone}</p>
+				</div>
+				<div className='cardContent'>
 					<GlobalOutlined />
-					{`http://${user.website}`}
-					{user.website}
-				</p>
+					<p>{`http://${user.website}`}</p>
+				</div>
 
 				<UserForm
 					onCancelCb={handleCancel}
